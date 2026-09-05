@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أثر</title>
+<style>
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f5f5;
+  color:#222;
+}
+header{
+  background:#222;
+  color:white;
+  padding:25px;
+  text-align:center;
+}
+.container{
+  padding:20px;
+  max-width:600px;
+  margin:auto;
+}
+.card{
+  background:white;
+  padding:20px;
+  margin:15px 0;
+  border-radius:15px;
+  box-shadow:0 2px 8px #ccc;
+}
+button{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:10px;
+  background:#222;
+  color:white;
+  font-size:17px;
+  margin-top:10px;
+}
+input,textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:13px;
+  margin-top:8px;
+  border:1px solid #ccc;
+  border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>أثر</h1>
+<p>اترك أثرًا جميلًا</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>مرحبًا بك 👋</h2>
+<p>هذا هو الإصدار الأول من تطبيق أثر.</p>
+</div>
+
+<div class="card">
+<h3>اكتب أثرك اليوم</h3>
+<input id="title" placeholder="العنوان">
+<textarea id="text" rows="5" placeholder="اكتب ما تريد حفظه..."></textarea>
+<button onclick="save()">حفظ الأثر</button>
+</div>
+
+<div class="card">
+<h3>آثاري</h3>
+<div id="list"></div>
+</div>
+
+</div>
+
+<script>
+function save(){
+  let title=document.getElementById("title").value;
+  let text=document.getElementById("text").value;
+
+  if(!text){
+    alert("اكتب شيئًا أولًا");
+    return;
+  }
+
+  let old=JSON.parse(localStorage.getItem("athar")||"[]");
+  old.push({title:title,text:text});
+  localStorage.setItem("athar",JSON.stringify(old));
+
+  document.getElementById("title").value="";
+  document.getElementById("text").value="";
+  show();
+}
+
+function show(){
+  let data=JSON.parse(localStorage.getItem("athar")||"[]");
+  let list=document.getElementById("list");
+
+  if(data.length===0){
+    list.innerHTML="<p>لا توجد آثار محفوظة بعد.</p>";
+    return;
+  }
+
+  list.innerHTML=data.map((x,i)=>
+    `<div style="border-bottom:1px solid #ddd;padding:10px 0">
+      <b>${x.title||"أثر بدون عنوان"}</b>
+      <p>${x.text}</p>
+    </div>`
+  ).join("");
+}
+
+show();
+</script>
+
+</body>
+</html>
